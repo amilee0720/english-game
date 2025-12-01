@@ -39,15 +39,24 @@
         .btn-secondary { background-color: #95a5a6; color: white; font-size: 14px; }
         .btn-outline { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
         .btn-small { padding: 5px 10px; font-size: 12px; margin: 0 2px;}
-
         .btn-giant {
             padding: 20px 50px; font-size: 24px; border-radius: 50px;
             background: linear-gradient(to bottom, #e74c3c, #c0392b);
             color: white; box-shadow: 0 5px 0 #962d22; margin-top: 10px;
         }
         .btn-giant:active { transform: translateY(5px); box-shadow: none; }
+        .container {
+            background-color: var(--card-bg); padding: 30px; border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 90%; max-width: 800px;
+            text-align: center; display: none; position: relative; margin-top: 60px;
+        }
+        /* .active-section { display: block; } */
+        .progress-info { font-size: 14px; color: #555; margin-bottom: 10px; font-weight: bold; }
+        .input-group { display: flex; gap: 10px; }
+        .input-group input { flex: 1; padding: 10px; }
+        .loading-spinner { position: absolute; color: #888; }
+        .toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: opacity 0.5s; pointer-events: none; z-index: 3000; }
 
-        /* 首頁 */
         #landingPage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
@@ -65,9 +74,6 @@
         }
         .enter-btn:hover { transform: scale(1.1); background: var(--secondary-color); color: white; border-color: var(--secondary-color); }
         .floating-icon { position: absolute; font-size: 40px; opacity: 0.8; animation: float 6s ease-in-out infinite; pointer-events: none; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
-        @keyframes float { 0% {transform: translateY(0px) rotate(0deg);} 50% {transform: translateY(-30px) rotate(10deg);} 100% {transform: translateY(0px) rotate(0deg);} }
-
         .admin-trigger-btn {
             position: fixed; top: 15px; left: 15px; z-index: 1500;
             background: rgba(255,255,255,0.8); border: 1px solid #ccc;
@@ -76,14 +82,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s; display: none;
         }
         .admin-trigger-btn:hover { background: white; color: var(--primary-color); }
-
-        .container {
-            background-color: var(--card-bg); padding: 30px; border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 90%; max-width: 800px;
-            text-align: center; display: none; position: relative; margin-top: 60px;
-        }
-        .active-section { display: block; }
-        .progress-info { font-size: 14px; color: #555; margin-bottom: 10px; font-weight: bold; }
 
         .mode-container {
             display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
@@ -102,8 +100,6 @@
         .mode-btn.locked { background-color: #e9ecef; color: #adb5bd; cursor: not-allowed; pointer-events: none; border-color: transparent; }
         .mode-btn.locked::after { content: '🔒'; font-size: 12px; position: absolute; top: -5px; right: -5px; }
         .mode-btn.unlocked-game { background-color: var(--secondary-color); color: white; animation: pop 0.5s; border-color: #e67e22; }
-        @keyframes pop { 0% { transform: scale(0.8); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-
         .source-settings-card { background: #eef2f5; border: 2px solid #cbd5e0; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; }
         .manage-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
         .manage-tab { padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; background: #eee; color: #777; border: none; transition: 0.2s; }
@@ -117,6 +113,9 @@
         #wordList li, #topicWordList li { background: #f8f9fa; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid #eee; }
         .topic-grid { display: grid; grid-template-columns: 1fr; gap: 10px; text-align: left; }
         .topic-card { background: white; border: 2px solid #ddd; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .topic-card:hover { border-color: var(--primary-color); background: #f0f7ff; }
+        .topic-name { font-weight: bold; font-size: 18px; color: #333; }
+        .topic-count { font-size: 12px; color: #888; background: #eee; padding: 2px 8px; border-radius: 10px; }
         .admin-controls { display: flex; justify-content: space-between; align-items: center; background: #eee; padding: 10px; border-radius: 8px; margin-top: 20px; margin-bottom: 20px; }
         .admin-img-preview { width: 60px; height: 60px; border-radius: 5px; object-fit: cover; border: 1px solid #ccc; background: #eee; }
         .admin-word-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 18px; font-weight: bold; color: #333; }
@@ -130,20 +129,17 @@
         .game-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.95); z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .score-board { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #333; z-index: 10; }
         .replay-audio-mini { position: absolute; bottom: 10px; right: 10px; z-index: 40; }
-        .speed-panel { position: absolute; bottom: 10px; left: 10px; z-index: 40; background: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .speed-panel { position: absolute; bottom: 10px; left: 10px; z-index: 40; background: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }       
+        .speed-label { font-size: 12px; font-weight: bold; color: #555; margin-right: 3px; }
         .speed-btn { width: 25px; height: 25px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-size: 12px; font-weight: bold; color: #666; display: flex; justify-content: center; align-items: center; transition: 0.2s; padding: 0; }
+        .speed-btn:hover { background: #eee; }
         .speed-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 
-        /* --- 互動遊戲區塊 --- */
         #fallingGameArea { position: relative; width: 100%; height: 400px; background: linear-gradient(to bottom, #87CEEB, #E0F7FA); border: 4px solid #4a90e2; border-radius: 15px; overflow: hidden; display: none; }
         .falling-item { position: absolute; width: 120px; height: 120px; top: -150px; background-color: white; border-radius: 15px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; overflow: hidden; transition: transform 0.2s, background-color 0.2s; }
         .falling-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
         
-        /* 縮小的打地鼠 */
-        #whackGameArea { 
-            position: relative; width: 100%; max-width: 500px; margin: 0 auto; /* 修正2：限制寬度 */
-            background: #8d6e63; border-radius: 15px; overflow: hidden; border: 4px solid #5d4037; display: none; padding: 40px 10px 10px 10px; 
-        }
+        #whackGameArea { position: relative; width: 100%; max-width: 500px; margin: 0 auto; background: #8d6e63; border-radius: 15px; overflow: hidden; border: 4px solid #5d4037; display: none; padding: 40px 10px 10px 10px; }
         .mole-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .mole-hole { width: 100%; aspect-ratio: 1/1; background: #3e2723; border-radius: 50%; position: relative; overflow: hidden; box-shadow: inset 0 5px 10px rgba(0,0,0,0.5); }
         .mole { width: 80%; height: 80%; position: absolute; left: 10%; bottom: -100%; transition: bottom 0.2s; background: white; border-radius: 50%; border: 3px solid #fff; cursor: pointer; overflow: hidden; }
@@ -169,9 +165,7 @@
         .match-card.selected { background-color: var(--primary-color); color: white; border-color: var(--primary-color); box-shadow: 0 0 15px var(--primary-color); z-index: 30; transform: scale(1.2) !important; }
         .match-card.docked-card { position: absolute; bottom: 0px; left: 50%; transform: translate(-50%, 50%); z-index: 20; background: #f1c40f; border: 3px solid #d35400; color: #2c3e50; box-shadow: 0 4px 10px rgba(0,0,0,0.4); padding: 5px 15px; font-size: 20px; pointer-events: none; white-space: nowrap; cursor: default; font-weight: 900; }
 
-        /* 靜態題型 */
         #staticGameArea { display: block; }
-        /* 修正1：主圖片容器放大 */
         .image-container { position: relative; width: 100%; height: 450px; background-color: #eee; border-radius: 10px; margin-bottom: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .game-image { width: 100%; height: 100%; object-fit: contain; background-color: #fff; transition: opacity 0.3s; }
         .blurred-image { filter: blur(20px); opacity: 0.5; }
@@ -184,19 +178,11 @@
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .image-option, .text-option { border: 4px solid #ddd; border-radius: 10px; cursor: pointer; overflow: hidden; background: #eee; transition: 0.2s; display: flex; justify-content: center; align-items: center; }
         .text-option { background: white; padding: 15px; font-size: 20px; font-weight: bold; min-height: 50px; }
-        
-        /* 修正1：選項圖片放大 */
         .image-option { height: 200px; background: #fff; }
         .image-option img { width: 100%; height: 100%; object-fit: contain; }
         .correct-answer { border-color: #2ecc71 !important; background-color: #e8f8f5 !important; }
         .wrong-answer { border-color: #e74c3c !important; opacity: 0.6; }
 
-        .toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: opacity 0.5s; pointer-events: none; z-index: 3000; }
-        .loading-spinner { position: absolute; color: #888; }
-        .input-group { display: flex; gap: 10px; }
-        .input-group input { flex: 1; padding: 10px; }
-
-        /* 修正3：麥克風優化 */
         .mic-btn {
             width: 140px; height: 140px; border-radius: 50%; border: none;
             background-color: #3498db; color: white; font-size: 70px;
@@ -206,25 +192,51 @@
         }
         .mic-btn:hover { background-color: #2980b9; transform: scale(1.05); }
         .mic-btn.listening {
-            background-color: #e74c3c !important; /* 紅色 */
-            box-shadow: 0 0 20px #c0392b; /* 紅色光暈 */
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(231, 76, 60, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
-        
+            background-color: #e74c3c !important; box-shadow: 0 0 20px #c0392b; animation: pulse 1s infinite;
+        }       
         .speaking-result { font-size: 20px; font-weight: bold; min-height: 30px; margin-top: 10px; color: #555; }
 
-        /* 動畫 */
         .falling-item.shake-hard, .mole.hit-wrong { animation: shakeHard 0.5s ease-in-out; background-color: #e74c3c !important; border-color: #e74c3c !important; }
         .mole.hit-correct, .falling-item.processed[style*="background: rgb(46, 204, 113)"] { transform: scale(1.2); transition: 0.2s; }
+        .footer {
+            margin-top: 40px; padding: 20px; text-align: center;
+            font-size: 12px; color: #888; width: 100%; border-top: 1px solid #ddd;
+        }
+        .footer a { color: var(--primary-color); text-decoration: none; cursor: pointer; }
+        .footer a:hover { text-decoration: underline; }
+
+        #copyrightModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 5000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .copyright-content {
+            background: white; padding: 30px; border-radius: 15px;
+            max-width: 500px; width: 90%; text-align: left;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative; max-height: 80vh; overflow-y: auto;
+        }
+        .copyright-content h3 { margin-top: 0; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .copyright-content h4 { margin-top: 15px; margin-bottom: 5px; color: #555; }
+        .copyright-content p { font-size: 14px; color: #666; line-height: 1.6; margin: 5px 0; }
+        .close-modal-btn {
+            position: absolute; top: 15px; right: 20px;
+            font-size: 24px; cursor: pointer; color: #999; border: none; background: none;
+        }
+        .close-modal-btn:hover { color: #333; }
+        
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
+        @keyframes float { 0% {transform: translateY(0px) rotate(0deg);} 50% {transform: translateY(-30px) rotate(10deg);} 100% {transform: translateY(0px) rotate(0deg);} }
+        @keyframes pop { 0% { transform: scale(0.8); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @keyframes shakeHard { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(231, 76, 60, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
+ 
+        
     </style>
 </head>
 <body>
 
-    <!-- 首頁 (Landing Page) -->
     <div id="landingPage">
         <span class="floating-icon" style="top:10%; left:10%; animation-delay:0s;">⭐</span>
         <span class="floating-icon" style="top:20%; right:15%; animation-delay:1s;">📝</span>
@@ -237,10 +249,8 @@
         <button class="enter-btn" onclick="enterGame()">進入挑戰 ➝</button>
     </div>
 
-    <!-- 左上角後台觸發按鈕 -->
     <button id="adminTriggerBtn" class="admin-trigger-btn" onclick="checkAdminPassword()">⚙️ 設定</button>
 
-    <!-- 後台設定區塊 -->
     <div id="adminSection" class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2>後台設定</h2>
@@ -253,9 +263,8 @@
         </div>
 
         <div id="adminTab_vocab" class="admin-content-pane active">
-            <!-- 來源設定區 -->
             <div class="source-settings-card">
-                <h3 style="margin-top:0;">🎮 題目套用設定 (Source)</h3>
+                <h3 style="margin-top:0;">🎮 題目套用設定</h3>
                 <p style="font-size:13px; color:#666; margin-bottom:10px;">請選擇前台遊戲要使用哪一份題庫：</p>
                 <div class="radio-group">
                     <label>
@@ -379,23 +388,15 @@
             <div id="conveyorGameArea"><div class="score-board"><span>Score: <span id="conveyorScore">0</span></span><span style="color:#e74c3c" id="conveyorHearts">❤️❤️❤️</span></div><div id="conveyorOverlay" class="game-overlay"><h3>準備好了嗎？</h3><button class="btn btn-primary" onclick="startMinigame('conveyor')">開始遊戲</button></div>
                 <div class="speed-panel"><span class="speed-label">速度:</span><button class="speed-btn active" onclick="setSpeedLevel('conveyor', 1, this)">1</button><button class="speed-btn" onclick="setSpeedLevel('conveyor', 2, this)">2</button><button class="speed-btn" onclick="setSpeedLevel('conveyor', 3, this)">3</button><button class="speed-btn" onclick="setSpeedLevel('conveyor', 4, this)">4</button><button class="speed-btn" onclick="setSpeedLevel('conveyor', 5, this)">5</button></div>
                 <div class="conveyor-track"></div><div class="conveyor-zone"></div><div id="conveyorItems"></div><div style="position:absolute; bottom:20px; width:100%; text-align:center;"><button class="btn btn-secondary" style="margin-right:20px;" onclick="playCurrentAudio()">🔊 重聽</button><button class="btn btn-giant" id="conveyorGrabBtn">✋ 抓取!</button></div></div>
-            
-            <!-- 新增：配對遊戲區 -->
             <div id="matchGameArea">
                 <div class="score-board"><span>Score: <span id="matchScore">0</span></span><span style="color:#e74c3c" id="matchHearts">❤️❤️❤️</span></div>
                 <div id="matchOverlay" class="game-overlay"><h3>配對挑戰</h3><p>拖曳單字卡到正確圖片上</p><button class="btn btn-primary" onclick="startMinigame('match')">開始遊戲</button></div>
-                
-                <!-- 上方圖片區 -->
+            
                 <div class="match-row" id="matchTopRow"></div>
-                
-                <!-- 中間單字卡散落區 -->
                 <div class="match-center-zone" id="matchCenterZone"></div>
-                
-                <!-- 下方圖片區 -->
                 <div class="match-row" id="matchBottomRow"></div>
             </div>
 
-            <!-- 靜態遊戲區 -->
             <div id="staticGameArea">
                 <div id="commonImageArea"><div class="image-container"><div id="loadingText" class="loading-spinner">...</div><img id="questionImage" class="game-image" src="" alt="" style="opacity: 0;"></div></div>
                 <div id="commonAudioBtn" style="display:none;"><button class="btn audio-btn" style="background:#f39c12; color:white; border-radius:30px;" onclick="playCurrentAudio()">🔊 播放發音</button></div>
@@ -413,6 +414,30 @@
             </div>
         </div>
         <div id="emptyState" style="display: none;"><p>目前題庫為空，請至後台檢查設定！<br>(請確認已選擇「主題」且該主題內有單字)</p></div>
+    </div>
+
+        
+    <div class="footer">
+        &copy; 2025 English Challenge. Created for educational purposes. <br>
+        <a onclick="openCopyrightModal()">關於本站、版權與隱私聲明</a>
+    </div>
+
+    <div id="copyrightModal">
+        <div class="copyright-content">
+            <button class="close-modal-btn" onclick="closeCopyrightModal()">×</button>
+            <h3>關於本站</h3>
+            <h4>1. 使用條款與目的</h4>
+            <p>本網頁是一個開源的英文單字練習工具，旨在提供互動式的學習體驗。本站完全免費，且無任何商業營利行為。</p>
+            <h4>2. 圖片版權聲明 (Image Disclaimer)</h4>
+            <p>本站顯示之圖片是透過關鍵字即時搜尋 Bing Images 公開資源。本站不擁有這些圖片的版權，圖片僅用於輔助教學。</p>
+            <h4>3. 隱私權政策 (Privacy Policy)</h4>
+            <p>本站採用 <strong>LocalStorage (瀏覽器端儲存)</strong> 技術。您的學習進度、自訂單字與設定，<strong>完全只儲存在您自己的電腦或手機中</strong>，不會上傳至任何雲端伺服器。</p>
+            <h4>4. 音效與語音</h4>
+            <p>語音合成與辨識功能使用瀏覽器內建的 Web Speech API。音效由 Web Audio API 即時運算生成。</p>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="closeCopyrightModal()">我瞭解了</button>
+            </div>
+        </div>
     </div>
     
     <div id="roundToast" class="toast"></div>
@@ -1111,6 +1136,11 @@
         function loadImage(wObj){ const i=document.getElementById('questionImage'),l=document.getElementById('loadingText'); imageRequestId++; const id=imageRequestId; i.style.opacity='0'; l.style.display='block'; const s=getBingImg(wObj); const n=new Image(); n.src=s; n.onload=()=>{ if(id===imageRequestId){ i.src=s; i.style.opacity='1'; l.style.display='none'; }}; }
         function playCurrentAudio(){ if(!currentWord)return; window.speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(currentWord.text); u.rate=0.9; if(currentQuestionVoice)u.voice=currentQuestionVoice; window.speechSynthesis.speak(u); }
         function assignVoiceForCurrentQuestion(){ if(voices.length===0)voices=window.speechSynthesis.getVoices(); let c=voices.filter(v=>v.lang==='en-US'&&(v.name.includes('Google')||v.name.includes('Microsoft'))); if(c.length===0)c=voices.filter(v=>v.lang.startsWith('en')); currentQuestionVoice=c.length>0?c[Math.floor(Math.random()*c.length)]:null; }
-    </script>
+        function openCopyrightModal() {
+            document.getElementById('copyrightModal').style.display = 'flex';
+        }
+        function closeCopyrightModal() {
+            document.getElementById('copyrightModal').style.display = 'none';
+        }    </script>
 </body>
 </html>
