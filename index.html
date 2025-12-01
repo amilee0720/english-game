@@ -507,7 +507,7 @@
         }
 
         function checkAdminPassword() {
-            const pwd = prompt("請輸入管理密碼：");
+            const pwd = prompt("請輸入管理密碼(提示：4個0)：");
             if (pwd === "0000") {
                 switchView('admin');
             } else if (pwd !== null) {
